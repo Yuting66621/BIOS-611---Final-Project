@@ -1,0 +1,74 @@
+{
+    "clipr::clipr_output": {
+        "name": "Output to clipboard",
+        "package": "clipr",
+        "title": "",
+        "description": "Copies the console output of a selected expression to the system clipboard",
+        "interactive": false,
+        "binding": "clipr_output",
+        "ordinal": 8
+    },
+    "clipr::clipr_result": {
+        "name": "Value to clipboard",
+        "package": "clipr",
+        "title": "",
+        "description": "Copies the results of a selected expression to the system clipboard",
+        "interactive": false,
+        "binding": "clipr_result",
+        "ordinal": 7
+    },
+    "covr::addin_report": {
+        "name": "Calculate package test coverage",
+        "package": "covr",
+        "title": "",
+        "description": "Calculates the package test coverage and opens a report, using `covr::report()`",
+        "interactive": false,
+        "binding": "addin_report",
+        "ordinal": 4
+    },
+    "listviewer::jsoneditAddin": {
+        "name": "jsonedit",
+        "package": "listviewer",
+        "title": "",
+        "description": "View a list in jsonedit",
+        "interactive": false,
+        "binding": "jsoneditAddin",
+        "ordinal": 3
+    },
+    "renv::renv_addins_embed": {
+        "name": "Embed a Lockfile",
+        "package": "renv",
+        "title": "",
+        "description": "Embeds a lockfile in the document, via renv::use().",
+        "interactive": false,
+        "binding": "renv_addins_embed",
+        "ordinal": 1
+    },
+    "reprex::reprex_addin": {
+        "name": "Render reprex...",
+        "package": "reprex",
+        "title": "",
+        "description": "Run `reprex::reprex()` to prepare a reproducible example for sharing.",
+        "interactive": true,
+        "binding": "reprex_addin",
+        "ordinal": 5
+    },
+    "reprex::reprex_selection": {
+        "name": "Reprex selection",
+        "package": "reprex",
+        "title": "",
+        "description": "Prepare reprex from current selection",
+        "interactive": false,
+        "binding": "reprex_selection",
+        "ordinal": 6
+    },
+    "testit::insert_identical": {
+        "name": "Insert %==%",
+        "package": "testit",
+        "title": "",
+        "description": "Insert the infix operator %==% from testit.",
+        "interactive": false,
+        "binding": "insert_identical",
+        "ordinal": 2
+    }
+}

@@ -1,0 +1,56 @@
+1764531083065:# Load all required libraries
+1764531083071:library(tidyverse)    # Data manipulation & plotting
+1764531139042:# Load all required libraries
+1764531139043:library(tidyverse)    # Data manipulation & plotting
+1764531156327:# Load all required libraries
+1764531156329:#library(tidyverse)    # Data manipulation & plotting
+1764531156331:library(corrplot)     # Correlation matrices
+1764531156347:library(naniar)       # Missing value visualization
+1764531166181:# Load all required libraries
+1764531166183:#library(tidyverse)    # Data manipulation & plotting
+1764531166187:library(corrplot)     # Correlation matrices
+1764531166191:#library(naniar)       # Missing value visualization
+1764531166193:library(GGally)       # Pair plots
+1764531172383:# Load all required libraries
+1764531172386:#library(tidyverse)    # Data manipulation & plotting
+1764531172388:library(corrplot)     # Correlation matrices
+1764531172390:#library(naniar)       # Missing value visualization
+1764531172392:#library(GGally)       # Pair plots
+1764531172393:library(factoextra)   # PCA visualization
+1764531178607:# Load all required libraries
+1764531178610:#library(tidyverse)    # Data manipulation & plotting
+1764531178613:library(corrplot)     # Correlation matrices
+1764531178615:#library(naniar)       # Missing value visualization
+1764531178619:#library(GGally)       # Pair plots
+1764531178621:#library(factoextra)   # PCA visualization
+1764531178623:library(caret)        # Machine learning workflow
+1764531183725:# Load all required libraries
+1764531183728:#library(tidyverse)    # Data manipulation & plotting
+1764531183732:library(corrplot)     # Correlation matrices
+1764531183734:#library(naniar)       # Missing value visualization
+1764531183737:#library(GGally)       # Pair plots
+1764531183740:#library(factoextra)   # PCA visualization
+1764531183741:#library(caret)        # Machine learning workflow
+1764531183743:library(glmnet)       # Lasso/Ridge regression
+1764531184339:library(pROC)         # ROC curves
+1764531184361:library(randomForest) # Random Forest model
+1764531197676:# Load all required libraries
+1764531197683:#library(tidyverse)    # Data manipulation & plotting
+1764531197691:library(corrplot)     # Correlation matrices
+1764531197698:#library(naniar)       # Missing value visualization
+1764531197700:#library(GGally)       # Pair plots
+1764531197701:#library(factoextra)   # PCA visualization
+1764531197703:#library(caret)        # Machine learning workflow
+1764531197704:library(glmnet)       # Lasso/Ridge regression
+1764531197706:library(pROC)         # ROC curves
+1764531197709:#library(randomForest) # Random Forest model
+1764531197710:library(MASS)         # LDA model
+1764531197737:library(reshape2)     # Data reshaping
+1764531197793:# Set plotting theme
+1764531197793:theme_set(theme_minimal(base_size = 12))
+1764531704661:installed.packages()[, "Package"]
+1764531724637:"tidyverse" %in% installed.packages()[, "Package"]
+1764531724650:"ggplot2" %in% installed.packages()[, "Package"]
+1764531744179:.libPaths()
+1764531799028:"tidyverse" %in% installed.packages()[, "Package"]
+1764531799047:"ggplot2" %in% installed.packages()[, "Package"]

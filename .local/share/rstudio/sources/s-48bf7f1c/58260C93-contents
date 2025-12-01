@@ -1,0 +1,60 @@
+---
+title: "Hepatitis C Dataset: Comprehensive Analysis - BIOS 611 Final Project"
+author: Yuting Sun
+data: HCV data from UCI https://archive.ics.uci.edu/dataset/571/hcv+data
+date: Nov 30, 2025
+---
+
+# 1. Introduction
+
+## 1.1 Project Overview
+
+This project presents a comprehensive analysis of the Hepatitis C dataset, exploring clinical variables to understand disease patterns and develop predictive models. The analysis follows a data science workflow from initial exploration through advanced modeling.
+
+## 1.2 Research Questions
+
+The analysis addresses several key questions:
+
+1. **Data Quality**: What is the structure and quality of the dataset? Are there missing values or anomalies?
+2. **Feature Relationships**: How do different clinical markers correlate with each other?
+3. **Dimensionality**: Can we reduce the feature space while preserving important information?
+4. **Prediction**: Can we build accurate models to classify Hepatitis C categories?
+5. **Feature Importance**: Which clinical markers are most important for prediction?
+
+# 2. Initial Data Exploration
+
+## 2.1 Loading Libraries and Data
+```{r}
+"tidyverse" %in% installed.packages()[, "Package"]
+"ggplot2" %in% installed.packages()[, "Package"]
+```
+
+```{r}
+.libPaths()
+```
+
+```{r load-packages}
+# Load all required libraries
+#library(tidyverse)    # Data manipulation & plotting
+library(corrplot)     # Correlation matrices
+#library(naniar)       # Missing value visualization
+#library(GGally)       # Pair plots
+#library(factoextra)   # PCA visualization
+#library(caret)        # Machine learning workflow
+library(glmnet)       # Lasso/Ridge regression
+library(pROC)         # ROC curves
+#library(randomForest) # Random Forest model
+library(MASS)         # LDA model
+library(reshape2)     # Data reshaping
+
+# Set plotting theme
+theme_set(theme_minimal(base_size = 12))
+```
+```{r load-data}
+# Load the dataset
+# Adjust the path according to your data location
+data <- read.csv("data/hcvdat0.csv")  
+
+# First look at the data
+head(data)
+```

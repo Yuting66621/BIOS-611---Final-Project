@@ -1,0 +1,45 @@
+# Dockerfile
+FROM amoselb/rstudio-m1
+
+# Install system dependencies for additional packages
+RUN apt-get update && apt-get install -y \
+    libcurl4-openssl-dev \
+    libssl-dev \
+    libxml2-dev \
+    libfontconfig1-dev \
+    libcairo2-dev \
+    libharfbuzz-dev \
+    libfribidi-dev \
+    libfreetype6-dev \
+    libpng-dev \
+    libtiff5-dev \
+    libjpeg-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install additional packages
+RUN R -e "install.packages(c( \
+    'tidyverse', \
+    'ggplot2', \
+    'dplyr', \
+    'tidyr', \
+    'readr', \
+    'corrplot', \
+    'naniar', \
+    'GGally', \
+    'factoextra', \
+    'cluster', \
+    'plotly', \
+    'caret', \
+    'glmnet', \
+    'pROC', \
+    'randomForest', \
+    'MASS', \
+    'reshape2', \
+    'rmarkdown', \
+    'knitr' \
+), repos='https://cran.rstudio.com/', \
+   dependencies=TRUE, \
+   lib='/usr/local/lib/R/library')"
+ 
+RUN R -e "library(tidyverse); library(caret); library(randomForest); cat('All packages loaded successfully!\n')"
+WORKDIR /home/rstudio
