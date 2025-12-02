@@ -110,13 +110,11 @@ missing_by_category <- data %>%
 print(missing_by_category)
 ```
 
-**Observations from this dataset：** - Sample Imbalance: blood donors
-make up the majority (533 samples) while disease categories have much
-fewer samples - Missing Value Distribution: missing values are mainly
-concentrated in the blood donor group, and most samples have only 1
-missing value - Decision Rationale: choosing imputation over deletion is
-better than drop all the missing values - to avoid further reducing
-already small disease samples and to prevent introducing bias
+**Observations from this dataset：** 
+
+- Sample Imbalance: blood donors make up the majority (533 samples) while disease categories have much fewer samples 
+- Missing Value Distribution: missing values are mainly concentrated in the blood donor group, and most samples have only 1 missing value 
+- Decision Rationale: choosing imputation over deletion is better than drop all the missing values - to avoid further reducing already small disease samples and to prevent introducing bias
 
 **3.2 Imputation Strategy**
 
@@ -265,6 +263,7 @@ ggsave(file.path('figures/', "04_biomarker_boxplots_staging.png"), p_box, width 
 ## 5.1 PCA
 
 ### 5.1.1 PCA on screening data using all 11 variables
+Purpose: Explore the intrinsic structure of the 11-biomarker dataset and assess separability between healthy and diseased groups.
 
 ```{r}
 cat("Saving 05_pca_screening_all.png ...\n")
@@ -330,6 +329,12 @@ print(p_key_pca)
 ggsave(file.path('figures/', "06_pca_screening_key.png"), p_key_pca, width = 8, height = 6)
 
 ```
+***Key Observations:***
+
+The first two principal components (PC1: 31.2%, PC2: 21.1%) capture 52.3% of the total variance
+Healthy individuals (red) form a tight, concentrated cluster, indicating consistent biomarker profiles
+Diseased individuals (blue) show greater dispersion but demonstrate clear separation from the healthy cluster
+This spatial separation validates the feasibility of classification using biomarker data
 
 ***Biplot***
 
@@ -354,14 +359,12 @@ print(p_biplot)
 ggsave(file.path('figures/', "07_pca_biplot_advanced.png"), p_biplot, width = 10, height = 7)
 ```
 
-***PCA Results Interpretation*** - The PCA Biplot demonstrates a clear
-separation between the Healthy and Disease populations. - The Healthy
-group (red) is characterized by higher levels of ALB, CHE, and CHOL,
-which are positively correlated and indicate preserved liver function.
-\_ Conversely, the Disease group (teal) is characterized by elevated
-levels of AST, GGT, and BIL, indicating liver injury. - The wide
-scattering of the Disease samples implies varied disease progression,
-whereas the healthy controls show high homogeneity
+***PCA Results Interpretation*** 
+
+- The PCA Biplot demonstrates a clear separation between the Healthy and Disease populations. 
+- The Healthy group (red) is characterized by higher levels of ALB, CHE, and CHOL, which are positively correlated and indicate preserved liver function.
+- Conversely, the Disease group (teal) is characterized by elevated levels of AST, GGT, and BIL, indicating liver injury. 
+- The wide scattering of the Disease samples implies varied disease progression, whereas the healthy controls show high homogeneity
 
 ***Variables Correlation Circle***
 
@@ -381,6 +384,16 @@ ggsave(file.path('figures/', "08_pca_var_circle.png"), p_corr_circle, width = 8,
 -The Correlation Circle further highlights that AST and GGT are strongly
 correlated with each other and inversely correlated with Albumin and
 Choline Esterase.
+
+
+
+***Biological Interpretation:***
+Liver synthesis markers (ALB, CHE, CHOL) point toward the healthy cluster → these markers are higher in healthy individuals, reflecting normal liver synthetic function
+Liver damage markers (AST, GGT, BIL) point toward the disease cluster → these markers are elevated in disease, reflecting hepatocellular injury and impaired metabolism
+This pattern aligns with the pathophysiology of liver disease: progressive loss of synthetic function coupled with increased release of intracellular enzymes
+
+***Conclusion:***
+PCA reveals that healthy and diseased states occupy distinct regions in the biomarker space, with the separation driven by complementary markers of liver synthesis and damage.
 
 ## 5.2 Lasso and Logistic Regression
 
@@ -438,18 +451,19 @@ summary(final_model)
 exp(coef(final_model))  
 exp(confint(final_model))  
 
-# 测试集预测
+# Prediction on testing dataset
 test_data <- final_data[-train_idx, ]
 test_pred <- predict(final_model, test_data, type = "response")
 test_auc <- roc(test_data$Disease, test_pred)$auc
 ```
 ***Logistic Regression with Selected Features***
--Following Lasso feature selection, a standard logistic regression model was fitted using the three identified biomarkers (AST, BIL, GGT). All three predictors demonstrated highly significant associations with hepatitis C disease status:
-    -- AST (OR = 1.087, 95% CI [1.061, 1.118], p < 0.001): Each 1 U/L increase in AST was associated with an 8.7% increase in disease odds, confirming its role as the strongest predictor.
-    -- BIL (OR = 1.076, 95% CI [1.027, 1.124], p = 0.001): Elevated bilirubin levels significantly contributed to disease risk, with a 7.6% odds increase per unit.
-    -- GGT (OR = 1.019, 95% CI [1.010, 1.029], p < 0.001): GGT showed a modest but significant effect (1.9% odds increase per unit).
 
--The model demonstrated excellent fit, reducing deviance by 57% compared to the null model (AIC = 197.87). These results validate the Lasso-selected features and provide interpretable effect sizes for clinical application.
+- Following Lasso feature selection, a standard logistic regression model was fitted using the three identified biomarkers (AST, BIL, GGT). All three predictors demonstrated highly significant associations with hepatitis C disease status:
+    - AST (OR = 1.087, 95% CI [1.061, 1.118], p < 0.001): Each 1 U/L increase in AST was associated with an 8.7% increase in disease odds, confirming its role as the strongest predictor.
+    - BIL (OR = 1.076, 95% CI [1.027, 1.124], p = 0.001): Elevated bilirubin levels significantly contributed to disease risk, with a 7.6% odds increase per unit.
+    - GGT (OR = 1.019, 95% CI [1.010, 1.029], p < 0.001): GGT showed a modest but significant effect (1.9% odds increase per unit).
+
+- The model demonstrated excellent fit, reducing deviance by 57% compared to the null model (AIC = 197.87). These results validate the Lasso-selected features and provide interpretable effect sizes for clinical application.
 
 ```{r}
 # Evaluate logistic regression model on test set
@@ -477,6 +491,7 @@ pred_class <- ifelse(test_pred_glm > 0.5, 1, 0)
 confusionMatrix(factor(pred_class), factor(y_test), positive = "1")
 ```
 ***Results***
+
 - The logistic regression model achieved:
     -- Accuracy: 96.0% (95% CI: 0.916–0.985)
     -- Sensitivity: 75.0% (correctly identified 12/16 disease cases)
@@ -485,10 +500,15 @@ confusionMatrix(factor(pred_class), factor(y_test), positive = "1")
     -- Negative Predictive Value: 97.1%
     
 ***Key Findings:***
+
 - The near-identical AUC values (0.930 vs 0.931) validate that the three biomarkers (AST, BIL, GGT) capture the essential discriminative information
 - High specificity (98.5%) minimizes false positives, crucial for avoiding unnecessary clinical interventions
 - The parsimonious 3-feature model offers practical advantages for clinical deployment while maintaining excellent predictive performance
 - Strong performance despite class imbalance (10.6% disease prevalence) demonstrates model robustness
+
+***Clinical Implications:***
+
+The 3-biomarker panel (AST, BIL, GGT) provides a practical screening tool for identifying individuals who may require further evaluation. The high specificity ensures that most healthy individuals will not undergo unnecessary additional testing, while the moderate sensitivity suggests that the tool should be combined with clinical judgment and other diagnostic methods, particularly for early-stage disease detection.
 
 # 6. Staging Task （RF & LDA)
 
@@ -557,6 +577,7 @@ MDSplot(rf_model, train_rf$Stage,
 dev.off()
 ```
 ***Observations：***
+
 - Random Forest identified the top three predictors for disease staging:ALB, CHE, ALP
 - Age and ALT show moderate importance, while BIL, PROT, CREA, GGT, CHOL, AST, and Sex contribute minimally to classification.
 - Clinical Interpretation: The three most important variables (ALB, CHE, ALP) represent key aspects of liver function that progressively deteriorate from hepatitis → fibrosis → cirrhosis.
@@ -591,6 +612,7 @@ cm_lda <- confusionMatrix(lda_pred$class, test_lda$Stage)
 print(cm_lda)
 ```
 ***Observation：***
+
 - LD1 captures 83.3% of between-class variance, serving as the primary discriminator
 - LD2 captures 16.7% of variance, providing secondary separation
 - The negative coefficients of ALB, CHE and CHOL indicate these variables decrease as disease progresses from hepatitis → fibrosis → cirrhosis, aligning with the LD1 score pattern.
@@ -641,6 +663,7 @@ dev.off()
 - Fibrosis distribution: Broader and bimodal, spanning from hepatitis territory into the cirrhosis range, reflecting its transitional nature
 
 **Interpretation:** 
+
 - LD1 effectively captures disease severity progression along a single axis. Cirrhosis is well-distinguished, but the overlap between hepatitis and fibrosis explains the classification challenges seen in the confusion matrix.
 
 ### 6.2.3 LDA Scatter Plot (LD1 vs LD2) 
@@ -676,5 +699,28 @@ dev.off()
 
 **Interpretation:** 
 - The two-dimensional projection confirms that fibrosis represents a transitional stage rather than a discrete category. While LD1 captures the primary disease progression axis, LD2 adds limited additional separation, consistent with it explaining only 16.7% of variance. The visualization supports the conclusion that three-class staging is inherently difficult due to the continuum nature of liver disease progression.
+
+## 7. Conclusion and Limitation
+
+### 7.1 Conclusion
+- This study analyzed hepatitis C biomarker data through two sequential tasks. 
+- For disease screening, principal component analysis revealed clear separation between healthy and diseased individuals, with synthesis markers (ALB, CHE, CHOL) distinguishing healthy states and damage markers (AST, GGT, BIL) indicating disease. Lasso regression identified three essential biomarkers (AST, BIL, GGT), and the subsequent logistic regression model achieved 96% accuracy with high specificity (98.5%), validating the effectiveness of this simplified panel for initial screening. 
+- For disease staging, both Random Forest and LDA achieved only 71% accuracy in differentiating hepatitis, fibrosis, and cirrhosis, with consistent confusion between hepatitis and fibrosis stages. This difficulty reflects the continuous nature of liver disease progression rather than modeling limitations, as cirrhosis showed distinct biomarker profiles while early stages overlapped substantially. The analysis demonstrates that blood biomarkers provide a practical screening tool but have inherent limitations for precise staging without additional clinical data.
+
+### 7.2 Limitation and Future Directions
+**Limitations：**
+
+- First, the limited sample size, particularly for disease cases (n=64 vs n=533 healthy), and the resulting severe class imbalance (10.6% disease prevalence) may affect model generalization and contribute to the moderate sensitivity (75%) observed in the screening task. 
+- Second, the analysis relies on cross-sectional data from a single time point, which cannot capture the dynamic nature of disease progression or the temporal trajectories of biomarker changes. 
+- Third, the dataset contains only 11 blood-based biomarkers without additional clinical information such as imaging data, histology results, viral load, or genetic factors, which limits the comprehensiveness of disease assessment. 
+- Fourth, the moderate staging accuracy (~71%) reflects not only data limitations but also the inherent biological challenge of discretizing a continuous disease progression process into distinct categories. 
+- Finally, the models were developed and validated on a specific patient population from a single source (UCI repository), and their generalizability to other populations with different demographic characteristics, disease etiologies, or healthcare settings remains untested.
+
+**Future Directions： **
+
+- Addressing class imbalance through techniques such as SMOTE (Synthetic Minority Over-sampling Technique), ensemble methods with balanced class weights, or stratified sampling strategies could improve sensitivity for disease detection. 
+- Incorporating longitudinal data would enable analysis of biomarker trajectories over time (e.g., rate of ALB decline, AST elevation patterns), which may prove more informative for disease staging and progression prediction than single time-point measurements. Integrating multimodal data including imaging features (ultrasound, CT, MRI), clinical variables (age, comorbidities, medication history), genetic markers, and viral characteristics could provide a more comprehensive disease profile and improve staging accuracy. 
+- Reframing the staging problem as either a binary classification (early vs advanced disease) or a regression task (predicting continuous disease severity scores) rather than forcing three discrete categories might better reflect the biological reality of disease progression. 
+- Finally, prospective studies could evaluate whether these biomarker-based models can guide clinical decision-making, improve patient outcomes, or reduce healthcare costs in real-world screening programs.
 
 
