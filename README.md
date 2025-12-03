@@ -212,7 +212,7 @@ docker build -t final-project .
 ## Author
 
 Yuting Sun
-BIOS 611 - Fall 2024
+BIOS 611 - Fall 2025
 
 ## License
 This project is submitted as coursework for BIOS 611.
